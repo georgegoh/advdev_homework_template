@@ -30,4 +30,6 @@ echo "Setting up Nexus in project $GUID-nexus"
 
 # To be Implemented by Student
 
-oc new-app -f ../templates/nexus3-persistent-template.yaml -n ${GUID}-nexus
+oc new-app -f ../templates/nexus3-persistent-template.yaml \
+	            -p NEXUS_VERSION=latest \
+							-n ${GUID}-nexus
