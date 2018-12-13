@@ -33,26 +33,27 @@ oc new-build  -D $'FROM docker.io/openshift/jenkins-agent-maven-35-centos7:v3.11
       USER root\nRUN yum -y install skopeo && yum clean all\n
       USER 1001' --name=jenkins-agent-appdev -n ${GUID}-jenkins
 
-oc new-app --template=eap71-basic-s2i \
-	         --param APPLICATION_NAME=mlbparks-pipeline \
-	         --param SOURCE_REPOSITORY_URL=https://github.com/georgegoh/advdev_homework_template.git \
-					 --param SOURCE_REPOSITORY_REF=40h \
-					 --param CONTEXT_DIR=/MLBParks \
-					 --param MAVEN_MIRROR_URL=http://nexus3.${GUID}-nexus.svc.cluster.local:8081/repository/maven-all-public \
-					 -n ${GUID}-jenkins
+oc new-build https://github.com/georgegoh/advdev_homework_template.git#40h \
+             --name=$mlbparks-pipeline \
+             --strategy=pipeline \
+             --context-dir=/MLBParks \
+             --env=GUID=${GUID} \
+             --env=CLUSTER=${CLUSTER} \
+             -n ${GUID}-jenkins
 
-oc new-app --template=eap71-basic-s2i \
-	         --param APPLICATION_NAME=nationalparks-pipeline \
-	         --param SOURCE_REPOSITORY_URL=https://github.com/georgegoh/advdev_homework_template.git \
-					 --param SOURCE_REPOSITORY_REF=40h \
-					 --param CONTEXT_DIR=/Nationalparks \
-					 --param MAVEN_MIRROR_URL=http://nexus3.${GUID}-nexus.svc.cluster.local:8081/repository/maven-all-public \
-					 -n ${GUID}-jenkins
+oc new-build https://github.com/georgegoh/advdev_homework_template.git#40h \
+             --name=$nationalparks-pipeline \
+             --strategy=pipeline \
+             --context-dir=/Nationalparks \
+             --env=GUID=${GUID} \
+             --env=CLUSTER=${CLUSTER} \
+             -n ${GUID}-jenkins
 
-oc new-app --template=eap71-basic-s2i \
-	         --param APPLICATION_NAME=parksmap-pipeline \
-	         --param SOURCE_REPOSITORY_URL=https://github.com/georgegoh/advdev_homework_template.git \
-					 --param SOURCE_REPOSITORY_REF=40h \
-					 --param CONTEXT_DIR=/ParksMap \
-					 --param MAVEN_MIRROR_URL=http://nexus3.${GUID}-nexus.svc.cluster.local:8081/repository/maven-all-public \
-					 -n ${GUID}-jenkins
+oc new-build https://github.com/georgegoh/advdev_homework_template.git#40h \
+             --name=$parksmap-pipeline \
+             --strategy=pipeline \
+             --context-dir=/ParksMap \
+             --env=GUID=${GUID} \
+             --env=CLUSTER=${CLUSTER} \
+             -n ${GUID}-jenkins
+
